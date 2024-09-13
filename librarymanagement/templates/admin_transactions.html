@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Transactions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        .navbar div {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        table td a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .actions button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .actions button:hover {
+            background-color: #45a049;
+        }
+        .logout {
+            text-align: right;
+            margin-top: 10px;
+        }
+        .logout button {
+            background: none;
+            border: none;
+            color: #4CAF50;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            var searchBook = document.getElementById("searchBook").value.trim();
+            var issueBook = document.getElementById("issueBook").value.trim();
+            var returnBook = document.getElementById("returnBook").value.trim();
+            var issueDropdown = document.getElementById("issueBookDropdown").value;
+            var returnDropdown = document.getElementById("returnBookDropdown").value;
+
+            if (searchBook === "" && issueBook === "" && returnBook === "" && issueDropdown === "" && returnDropdown === "") {
+                document.getElementById("error-message").innerText = "Please make a valid selection.";
+                return false;  // Prevent form submission
+            }
+            return true;  // Allow form submission if validation passes
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="navbar">
+            <div>Chart</div>
+            <div>Transactions</div>
+            <div><a href="{{ url_for('home_redirect') }}" style="color:white;">Home</a></div>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message"></div>
+
+        <!-- Table -->
+        <form action="{{ url_for('search_results') }}" method="post" onsubmit="return validateForm()">
+            <table>
+                <tr>
+                    <th><a href="{{ url_for('search_results') }}">Is book available?</a></th>
+                    <td>Book Availability</td>
+                    <td>
+                        <select id="bookAvailabilityDropdown" name="bookAvailability">
+                            <option value="">Select</option>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><a href="{{ url_for('admin_book_issue') }}">Issue book?</a></th>
+                    <td><input type="text" id="issueBook" name="issueBook" placeholder="Enter Book Name"></td>
+                    <td>
+                        <select id="issueBookDropdown" name="issueBookDropdown">
+                            <option value="">Select</option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><a href="{{ url_for('admin_returnbook') }}">Return book?</a></th>
+                    <td><input type="text" id="returnBook" name="returnBook" placeholder="Enter Author"></td>
+                    <td>
+                        <select id="returnBookDropdown" name="returnBookDropdown">
+                            <option value="">Select</option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><a href="{{ url_for('admin_payfine') }}">Pay fine?</a></th>
+                    <td><input type="text" id="payFine" name="payFine" placeholder="Enter Fine Amount"></td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button type="button" onclick="window.history.back()">Back</button>
+                <button type="submit">Search</button>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+
+        <!-- Logout -->
+        <div class="logout">
+            <form action="{{ url_for('logout') }}" method="post">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
